@@ -7,15 +7,15 @@ import { buildRecipeQuery, RecipeFilter } from '../../lib/recipeQueryBuilder';
 export class RecipesService {
   constructor(private httpService: HttpService) {}
 
-  getAvaliableRecipes(ingredient?: string, country?: string, category?: string) {
-    if (!ingredient && !country && !category) {
+  getAvaliableRecipes(ingredient?: string, area?: string, category?: string) {
+    if (!ingredient && !area && !category) {
       const searchUrl = `${process.env.API_BASE_URL}/search.php?s=`;
       return this.httpService.get(searchUrl).pipe(map(response => response.data));
     }
 
     const filters: RecipeFilter = {
       ...(ingredient && { ingredient }),
-      ...(country && { country }),
+      ...(area && { area }),
       ...(category && { category }),
     };
 
@@ -27,6 +27,14 @@ export class RecipesService {
   getRecipeInfo(id?: string) {
     return this.httpService
       .get(`${process.env.API_BASE_URL}/lookup.php?i=${id}`)
+      .pipe(map(response => response.data));
+  }
+
+  getAllFilterValues(filter: 'ingredient' | 'area' | 'category') {
+    const filterQuery = filter.charAt(0);
+
+    return this.httpService
+      .get(`${process.env.API_BASE_URL}/list.php?${filterQuery}=list`)
       .pipe(map(response => response.data));
   }
 }
