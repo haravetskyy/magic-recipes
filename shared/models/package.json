@@ -1,0 +1,18 @@
+{
+  "name": "@recipe-app/models",
+  "version": "0.0.1",
+  "description": "Shared models (schemas) and types",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "echo 'Building models...' && pnpm build && echo 'Success!'",
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "zod": "^3.24.3"
+  },
+  "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com  >",
+  "license": "ISC",
+  "packageManager": "pnpm@10.7.1"
+}
