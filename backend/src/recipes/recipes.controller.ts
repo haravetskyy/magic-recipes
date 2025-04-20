@@ -5,8 +5,17 @@ import { RecipesService } from './recipes.service';
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
-  @Get()
-  async getHello(@Query('id') id: string) {
-    return this.recipesService.getFullMealDetailsById(id);
+  @Get('getRecipes')
+  async getAvaliableRecipes(
+    @Query('ingredient') ingredient?: string,
+    @Query('country') country?: string,
+    @Query('category') category?: string,
+  ) {
+    return this.recipesService.getAvaliableRecipes(ingredient, country, category);
+  }
+
+  @Get('getRecipe')
+  async getRecipeInfo(@Query('id') id: string) {
+    return this.recipesService.getRecipeInfo(id);
   }
 }
