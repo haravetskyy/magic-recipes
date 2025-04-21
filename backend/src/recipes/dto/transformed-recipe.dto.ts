@@ -1,5 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+export class FilterValue {
+  @ApiProperty({ description: 'Unique identifier for the filter value' })
+  id: string;
+
+  @ApiProperty({ description: 'The filter value name' })
+  name: string;
+}
+
+export class TransformedFilterResponse {
+  @ApiProperty({
+    type: [FilterValue],
+    description: 'List of filter values',
+  })
+  values: FilterValue[];
+}
+
 export class TransformedRecipe {
   @ApiProperty({ description: 'The unique identifier of the recipe' })
   id: string;
@@ -44,12 +60,4 @@ export class TransformedRecipeInfoResponse {
     nullable: true,
   })
   recipe: TransformedRecipe | null;
-}
-
-export class TransformedFilterResponse {
-  @ApiProperty({
-    description: 'Array of filter values (e.g., ["Japanese", "Canadian"] for area)',
-    type: [String],
-  })
-  values: string[];
 }

@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { getEnvConfig } from '../config/environment';
 import { buildRecipeQuery, RecipeFilter } from '../lib/recipeQueryBuilder';
 import {
+  FilterValue,
   TransformedFilterResponse,
   TransformedRecipe,
   TransformedRecipeInfoResponse,
@@ -42,30 +43,6 @@ function transformRecipe(recipe: any): TransformedRecipe {
   };
 }
 
-function transformFilterResponse(
-  filter: 'ingredient' | 'area' | 'category',
-  response: any,
-): TransformedFilterResponse {
-  const recipes = response.meals || [];
-  let values: string[] = [];
-
-  if (filter === 'ingredient') {
-    values = recipes
-      .map((item: any) => item.strIngredient)
-      .filter((value: string) => value && value.trim());
-  } else if (filter === 'area') {
-    values = recipes
-      .map((item: any) => item.strArea)
-      .filter((value: string) => value && value.trim());
-  } else if (filter === 'category') {
-    values = recipes
-      .map((item: any) => item.strCategory)
-      .filter((value: string) => value && value.trim());
-  }
-
-  return { values };
-}
-
 @Injectable()
 export class RecipesService {
   private readonly apiBaseUrl: string;
@@ -76,6 +53,35 @@ export class RecipesService {
   ) {
     const config = getEnvConfig(configService);
     this.apiBaseUrl = config.apiBaseUrl;
+  }
+
+  private transformFilterResponse(
+    filter: 'ingredient' | 'area' | 'category',
+    response: any,
+  ): TransformedFilterResponse {
+    const recipes = response.meals || [];
+    let values: string[] = [];
+
+    if (filter === 'ingredient') {
+      values = recipes
+        .map((item: any) => item.strIngredient)
+        .filter((value: string) => value && value.trim());
+    } else if (filter === 'area') {
+      values = recipes
+        .map((item: any) => item.strArea)
+        .filter((value: string) => value && value.trim());
+    } else if (filter === 'category') {
+      values = recipes
+        .map((item: any) => item.strCategory)
+        .filter((value: string) => value && value.trim());
+    }
+
+    const transformedValues: FilterValue[] = values.map((name: string) => ({
+      id: name.toLowerCase().replace(/\s+/g, '_'),
+      name,
+    }));
+
+    return { values: transformedValues };
   }
 
   getAvaliableRecipes(ingredient?: string, area?: string, category?: string) {
@@ -121,9 +127,8 @@ export class RecipesService {
 
   getAllFilterValues(filter: 'ingredient' | 'area' | 'category') {
     const filterQuery = filter.charAt(0);
-
     return this.httpService
       .get(`${this.apiBaseUrl}/list.php?${filterQuery}=list`)
-      .pipe(map(response => transformFilterResponse(filter, response.data)));
+      .pipe(map(response => this.transformFilterResponse(filter, response.data)));
   }
 }
