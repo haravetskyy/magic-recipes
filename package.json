@@ -1,13 +1,12 @@
 {
-  "name": "recipe-app",
+  "name": "magic-recipe",
   "version": "0.0.1 ",
   "private": "true",
   "main": "index.js",
   "prettier": "@haravetskyy/prettier-config",
-  "scripts": {
-    "dev": "pnpm run -r --parallel --stream dev",
-    "install": "pnpm run -r install"
-  },
+  "workspaces": [
+    "./*"
+  ],
   "description": "Test assessment – the Recipe book (DevelopersToday)",
   "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "license": "ISC",
