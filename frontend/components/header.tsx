@@ -22,7 +22,7 @@ const headerContent = {
 const Header = () => {
   return (
     <header className="md:h-1/2 flex flex-col gap-4">
-      <section className="h-full rounded-lg md:p-4 flex flex-col md:flex-row justify-between gap-4 items-center z-10">
+      <div className="h-full rounded-lg md:p-4 flex flex-col md:flex-row justify-between gap-4 items-center z-10">
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-2xl md:text-6xl lg:w-2/3">
             {headerContent.mainHeading}
@@ -36,7 +36,7 @@ const Header = () => {
         </div>
 
         <Image className="w-3/4 md:w-auto" {...headerContent.imageContent} />
-      </section>
+      </div>
     </header>
   );
 };

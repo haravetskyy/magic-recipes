@@ -1,3 +1,4 @@
+import Footer from '@/components/footer';
 import Nav from '@/components/nav';
 import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
@@ -20,6 +21,7 @@ export default function RootLayout({
           <div className="p-4 flex flex-col gap-4 container ">
             <Nav />
             {children}
+            <Footer />
           </div>
         </ThemeProvider>
       </body>
