@@ -1,4 +1,4 @@
-# Recipe App
+# Magic Recipes
 
 Full-Stack JS engineer test assessment - the Recipe book for DevelopersToday. Project consists of frontend (**Next.js**) and backend (**Nest.js**)
 
@@ -11,16 +11,14 @@ Full-Stack JS engineer test assessment - the Recipe book for DevelopersToday. Pr
 Ensure you have the following installed:
 
 - **Node.js** (v18 or later)
-- **pnpm**
-- **Docker** and **Docker Compose**
 
 ---
 
 ### **1. Clone the Repository**
 
 ```bash
-git clone https://github.com/haravetskyy/harbor-task.git
-cd harbor-task
+git clone https://github.com/haravetskyy/magic-recipes.git
+cd magic-recipes
 ```
 
 ---
@@ -44,13 +42,18 @@ These files serve as templates, listing all necessary variables. You need to cop
 Install all required Node.js packages for both the frontend and backend:
 
 ```bash
-pnpm install
+bun install
 ```
+
+> [!NOTE]
+> If you want to use another package manager than `bun` you will need to enter this command in `root`, `frontend` and `backend` directories
 
 ---
 
 ### **4. Start the Application**
 
+Run this command in `frontend` and `backend` directories:
+
 ```bash
-pnpm dev
+bun dev
 ```
