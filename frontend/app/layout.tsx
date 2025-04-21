@@ -1,4 +1,3 @@
-import Header from '@/components/header';
 import Nav from '@/components/nav';
 import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
@@ -16,11 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased w-svw h-svh flex justify-center scroll-smooth`}>
+      <body className={`antialiased w-svw h-svh flex justify-center overflow-x-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <div className="p-4 flex flex-col gap-4 container overflow-x-hidden">
+          <div className="p-4 flex flex-col gap-4 container ">
             <Nav />
-            <Header />
             {children}
           </div>
         </ThemeProvider>
