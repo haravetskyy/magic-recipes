@@ -1,5 +1,5 @@
 {
-  "name": "magic-recipe",
+  "name": "magic-recipes",
   "version": "0.0.1 ",
   "private": "true",
   "main": "index.js",
@@ -7,7 +7,7 @@
   "workspaces": [
     "./*"
   ],
-  "description": "Test assessment – the Recipe book (DevelopersToday)",
+  "description": "A small application which utilizes Free Recipe API (TheMealDb.com)",
   "author": "Yuriy Haravetskyy <yuriyharavetskyy@gmail.com>",
   "license": "ISC",
   "dependencies": {

@@ -1,6 +1,6 @@
 # Magic Recipes
 
-Full-Stack JS engineer test assessment - the Recipe book for DevelopersToday. Project consists of frontend (**Next.js**) and backend (**Nest.js**)
+A small application which utilizes Free Recipe API (TheMealDb.com). Project consists of frontend (**Next.js**) and backend (**Nest.js**)
 
 ---
 
@@ -11,6 +11,7 @@ Full-Stack JS engineer test assessment - the Recipe book for DevelopersToday. Pr
 Ensure you have the following installed:
 
 - **Node.js** (v18 or later)
+- **bun** _(optional, I used it while developing)_
 
 ---
 
@@ -32,8 +33,8 @@ The project requires environment variables to function properly. To assist you, 
 
 These files serve as templates, listing all necessary variables. You need to copy them to their respective `.env` files and fill them with data specific to your setup.
 
-> [!NOTE]
-> In this step you can also simply copy data from `.env.example` files and paste it in `.env` files in the same directory
+> [!TIP]
+> In this step you can also simply rename `.env.example` files to `.env` in all the directories and setup will work
 
 ---
 
@@ -57,3 +58,12 @@ Run this command in `frontend` and `backend` directories:
 ```bash
 bun dev
 ```
+
+---
+
+### **5. Access the Application**
+
+Once the application is running, you can access it as follows, assuming you left all environment variables untouched (using default settings from `.env.example`):
+
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Backend API Documentation**: [http://localhost:8000/api](http://localhost:8000/api)
