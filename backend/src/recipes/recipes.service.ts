@@ -1,88 +1,17 @@
+import { getEnvConfig } from '@/config/environment';
+import { buildRecipeQuery } from '@/lib/recipeQueryBuilder';
+import { transformRecipe } from '@/utils/recipe.utils';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { map } from 'rxjs/operators';
-import { getEnvConfig } from '../config/environment';
-import { buildRecipeQuery, RecipeFilter } from '../lib/recipeQueryBuilder';
 import {
   FilterValue,
+  RecipeFilter,
   TransformedFilterResponse,
-  TransformedRecipe,
   TransformedRecipeInfoResponse,
   TransformedRecipesResponse,
-} from './dto/transformed-recipe.dto';
-
-const capitalizeFirstLetter = (sentence: string): string => {
-  if (!sentence) return sentence;
-  return sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase();
-};
-
-const transformRecipe = (recipe: any): TransformedRecipe => {
-  const ingredients: { ingredient: string; measure: string }[] = [];
-  for (let i = 1; i <= 20; i++) {
-    const ingredient = recipe[`strIngredient${i}`];
-    const measure = recipe[`strMeasure${i}`];
-    if (ingredient && ingredient.trim() && measure !== null) {
-      ingredients.push({ ingredient, measure: measure || '' });
-    } else {
-      break;
-    }
-  }
-
-  let instructions: string[] = [];
-  if (recipe.strInstructions) {
-    let rawInstructions = recipe.strInstructions
-      .split('\r\n')
-      .filter(
-        (step: string) =>
-          step.trim() && !/^step\s+\d+$/i.test(step.trim()) && !/^\d+$/.test(step.trim()),
-      );
-
-    rawInstructions = rawInstructions.map(step => {
-      let inParentheses = false;
-      let result = '';
-      for (let i = 0; i < step.length; i++) {
-        const char = step[i];
-        if (char === '(') inParentheses = true;
-        else if (char === ')') inParentheses = false;
-        result += inParentheses && char === '.' ? ';' : char;
-      }
-      return result;
-    });
-
-    let splitInstructions = rawInstructions.flatMap((step: string) =>
-      step
-        .split('.')
-        .map(s => s.trim().toLowerCase().replace(/;/g, '.'))
-        .filter(s => s && !/^\d+$/.test(s)),
-    );
-
-    instructions = [];
-    for (const step of splitInstructions) {
-      if ((step.startsWith('(') || step.endsWith(')')) && instructions.length > 0) {
-        instructions[instructions.length - 1] += ` ${step}`;
-      } else {
-        instructions.push(step);
-      }
-    }
-
-    instructions = instructions.map(capitalizeFirstLetter);
-  }
-
-  const tags = recipe.strTags ? recipe.strTags.split(',') : null;
-
-  return {
-    id: recipe.idMeal,
-    name: recipe.strMeal,
-    category: recipe.strCategory,
-    area: recipe.strArea,
-    instructions,
-    thumbnail: recipe.strMealThumb,
-    tags,
-    youtubeUrl: recipe.strYoutube,
-    ingredients,
-  };
-};
+} from './dto/recipe.dto';
 
 @Injectable()
 export class RecipesService {

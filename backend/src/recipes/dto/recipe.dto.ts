@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+export interface RecipeFilter {
+  area?: string;
+  ingredient?: string;
+  category?: string;
+}
+
 export class FilterValue {
   @ApiProperty({ description: 'Unique identifier for the filter value' })
   id: string;

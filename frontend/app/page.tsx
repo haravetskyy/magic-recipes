@@ -13,7 +13,7 @@ interface SelectedFilter {
   value: string | null;
 }
 
-export default function RecipesPage() {
+const RecipesPage = () => {
   const [selectedFilter, setSelectedFilter] = React.useState<SelectedFilter>({
     type: null,
     value: null,
@@ -29,4 +29,6 @@ export default function RecipesPage() {
       </main>
     </QueryClientProvider>
   );
-}
+};
+
+export default RecipesPage;

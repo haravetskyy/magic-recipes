@@ -4,7 +4,7 @@ import {
   TransformedFilterResponse,
   TransformedRecipeInfoResponse,
   TransformedRecipesResponse,
-} from './dto/transformed-recipe.dto';
+} from './dto/recipe.dto';
 import { RecipesService } from './recipes.service';
 
 @ApiTags('recipes')
