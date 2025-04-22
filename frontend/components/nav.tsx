@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 
 const Nav = () => {
   return (
-    <section className="rounded-lg flex flex-row md:px-6 gap-4 items-center justify-between">
+    <nav className="flex flex-row py-4 md:px-6 gap-4 items-center justify-between sticky top-0 bg-background">
       <Button variant="link" className="p-0">
         <Link href={'/'} className="flex flex-row gap-2 items-center">
           <Sparkles />
@@ -19,7 +19,7 @@ const Nav = () => {
         </Link>
         <ThemeToggle />
       </div>
-    </section>
+    </nav>
   );
 };
 
