@@ -44,7 +44,7 @@ const RecipeSection = ({ selectedFilter }: RecipeSectionProps) => {
   const recipes = recipesData?.recipes || [];
 
   return (
-    <section>
+    <section className="w-full">
       <div className="mb-4 text-center">
         <h3 className="text-2xl font-semibold">
           {selectedFilter.type && selectedFilter.value ? `${selectedFilter.value}` : 'All'} Recipes
