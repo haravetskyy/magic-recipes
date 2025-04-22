@@ -51,19 +51,21 @@ const RecipeSection = ({ selectedFilter }: RecipeSectionProps) => {
         </h3>
       </div>
 
-      <div className="md:p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <Skeleton key={index} className="aspect-square w-full" />
-            ))}
-          </div>
-        ) : recipes.length > 0 ? (
-          recipes.map(recipe => <RecipeCard key={recipe.id} {...recipe} />)
-        ) : (
-          <p className="text-center col-span-full">No recipes found.</p>
-        )}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Skeleton key={index} className="aspect-square w-full" />
+          ))}
+        </div>
+      ) : recipes.length > 0 ? (
+        <div className="md:p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
+          {recipes.map(recipe => (
+            <RecipeCard key={recipe.id} {...recipe} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-center col-span-full">No recipes found.</p>
+      )}
     </section>
   );
 };
