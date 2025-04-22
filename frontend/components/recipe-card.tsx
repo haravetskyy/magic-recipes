@@ -1,5 +1,5 @@
 import { Recipe } from '@/types/recipe';
-import { CookingPot } from 'lucide-react';
+import { ChefHat } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from './ui/badge';
@@ -8,7 +8,7 @@ import { Card, CardTitle } from './ui/card';
 
 const RecipeCard = ({ id, name, category, area, thumbnail }: Recipe) => {
   return (
-    <Card className="flex flex-col justify-between">
+    <Card className="flex flex-col justify-between h-full">
       <CardTitle className="text-2xl">{name}</CardTitle>
 
       <Image
@@ -20,13 +20,13 @@ const RecipeCard = ({ id, name, category, area, thumbnail }: Recipe) => {
       />
 
       <div className="flex flex-row gap-2">
-        <Badge variant="secondary">{category}</Badge>
-        <Badge variant="secondary">{area}</Badge>
+        {category && <Badge variant="secondary">{category}</Badge>}
+        {area && <Badge variant="secondary">{area}</Badge>}
       </div>
 
       <Link href={`/recipes/${id}`}>
         <Button className="cursor-pointer w-full px-12 ">
-          See complete recipe <CookingPot />
+          See complete recipe <ChefHat />
         </Button>
       </Link>
     </Card>

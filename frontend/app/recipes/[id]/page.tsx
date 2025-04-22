@@ -1,9 +1,10 @@
+import RecipeCarousel from '@/components/recipe-carousel';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getYouTubeEmbedUrl } from '@/lib/getYouTubeEmbedUrl';
 import { processSteps } from '@/lib/processSteps';
-import { RecipeInfoResponse } from '@/types/recipe';
-import { BookOpen, ListChecks, ShoppingBasket } from 'lucide-react';
+import { RecipeInfoResponse, RecipesResponse } from '@/types/recipe';
+import { BookOpen, ChefHat, ListChecks, ShoppingBasket } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import RecipeNotFound from './not-found';
@@ -21,14 +22,35 @@ const fetchRecipeById = async (id: string): Promise<RecipeInfoResponse> => {
   return data || { recipe: null };
 };
 
+const fetchRecipesByCategory = async (category: string): Promise<RecipesResponse> => {
+  const queryParams = new URLSearchParams();
+  queryParams.append('category', category);
+
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/recipes/getRecipes?${queryParams.toString()}`;
+  const response = await fetch(url, { cache: 'no-store' });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch recipes by category');
+  }
+
+  const data: RecipesResponse = await response.json();
+  return data || { recipes: [] };
+};
+
 const RecipePage = async ({ params }: { params: { id: string } }) => {
   let recipeData: RecipeInfoResponse['recipe'] = null;
+  let relatedRecipes: RecipesResponse['recipes'] = [];
 
   const { id } = await params;
 
   try {
     const data = await fetchRecipeById(id);
     recipeData = data.recipe;
+
+    if (recipeData && recipeData.category) {
+      const relatedData = await fetchRecipesByCategory(recipeData.category);
+      relatedRecipes = relatedData.recipes.filter(recipe => recipe.id !== id);
+    }
   } catch (error) {
     console.error('Error fetching recipe:', error);
     recipeData = null;
@@ -98,12 +120,20 @@ const RecipePage = async ({ params }: { params: { id: string } }) => {
 
       <ol className="list-none list-inside flex flex-col gap-4">
         {recipeData.instructions.map((step, index) => (
-          <li key={index} className="flex flex-row gap-4 bg-muted rounded-lg p-6 items-center">
+          <li
+            key={index}
+            className="flex flex-row gap-4 border bg-card rounded-lg p-6 items-center">
             <p className="text-3xl font-semibold">{processSteps(index)}</p>
             <p>{step}</p>
           </li>
         ))}
       </ol>
+
+      <h2 className="text-3xl font-semibold flex flex-row items-center justify-between bg-muted rounded-lg p-6">
+        More {recipeData.category} Recipes <ChefHat />
+      </h2>
+
+      <RecipeCarousel recipes={relatedRecipes} />
     </div>
   );
 };
