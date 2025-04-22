@@ -8,7 +8,7 @@ import { Card, CardTitle } from './ui/card';
 
 const RecipeCard = ({ id, name, category, area, thumbnail }: Recipe) => {
   return (
-    <Card>
+    <Card className="flex flex-col justify-between">
       <CardTitle className="text-2xl">{name}</CardTitle>
 
       <Image
