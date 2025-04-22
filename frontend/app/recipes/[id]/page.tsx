@@ -1,9 +1,11 @@
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { getYouTubeEmbedUrl } from '@/lib/getYouTubeEmbedUrl';
 import { processSteps } from '@/lib/processSteps';
 import { RecipeInfoResponse } from '@/types/recipe';
 import { BookOpen, ListChecks, ShoppingBasket } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import RecipeNotFound from './not-found';
 
 const fetchRecipeById = async (id: string): Promise<RecipeInfoResponse> => {
@@ -78,7 +80,12 @@ const RecipePage = async ({ params }: { params: { id: string } }) => {
             {recipeData.ingredients.map((item, index) => (
               <li key={index} className="flex flex-row gap-2">
                 <ShoppingBasket />
-                {item.measure} {item.ingredient}
+
+                <Button variant="link" className="p-0 h-auto">
+                  <Link href={`/?ingredient=${encodeURIComponent(item.ingredient)}`}>
+                    {item.measure} {item.ingredient}
+                  </Link>
+                </Button>
               </li>
             ))}
           </ul>

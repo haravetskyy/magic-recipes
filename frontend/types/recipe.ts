@@ -1,12 +1,3 @@
-export interface FilterValue {
-  id: string;
-  name: string;
-}
-
-export interface FilterResponse {
-  values: FilterValue[];
-}
-
 export interface Recipe {
   id: string;
   name: string;

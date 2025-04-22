@@ -1,14 +1,9 @@
 'use client';
 
-import { FilterResponse, FilterValue } from '@/types/recipe';
+import { FilterResponse, FilterValue, SelectedFilter } from '@/types/filter';
 import { useQuery } from '@tanstack/react-query';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Badge } from './ui/badge';
-
-interface SelectedFilter {
-  type: 'area' | 'category' | null;
-  value: string | null;
-}
 
 interface FilterSectionProps {
   selectedFilter: SelectedFilter;

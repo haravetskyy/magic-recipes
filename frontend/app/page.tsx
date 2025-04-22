@@ -3,31 +3,40 @@
 import FilterSection from '@/components/filter-section';
 import Header from '@/components/header';
 import RecipeSection from '@/components/recipe-section';
+import { SelectedFilter } from '@/types/filter';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React from 'react';
+import { useSearchParams } from 'next/navigation';
+import React, { Suspense } from 'react';
 
 const queryClient = new QueryClient();
 
-interface SelectedFilter {
-  type: 'area' | 'category' | null;
-  value: string | null;
-}
-
 const RecipesPage = () => {
+  const searchParams = useSearchParams();
   const [selectedFilter, setSelectedFilter] = React.useState<SelectedFilter>({
     type: null,
     value: null,
   });
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Header />
+  React.useEffect(() => {
+    const ingredient = searchParams.get('ingredient');
+    if (ingredient) {
+      setSelectedFilter({ type: 'ingredient', value: ingredient });
+    } else {
+      setSelectedFilter({ type: null, value: null });
+    }
+  }, [searchParams]);
 
-      <main id="main" className="flex flex-col items-center">
-        <FilterSection selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
-        <RecipeSection selectedFilter={selectedFilter} />
-      </main>
-    </QueryClientProvider>
+  return (
+    <Suspense fallback={<div>Loading recipes...</div>}>
+      <QueryClientProvider client={queryClient}>
+        <Header />
+
+        <main id="main" className="flex flex-col items-center">
+          <FilterSection selectedFilter={selectedFilter} setSelectedFilter={setSelectedFilter} />
+          <RecipeSection selectedFilter={selectedFilter} />
+        </main>
+      </QueryClientProvider>
+    </Suspense>
   );
 };
 

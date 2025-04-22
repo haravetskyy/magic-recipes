@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import RecipeCard from './recipe-card';
 
 interface SelectedFilter {
-  type: 'area' | 'category' | null;
+  type: 'area' | 'category' | 'ingredient' | null;
   value: string | null;
 }
 
@@ -46,19 +46,17 @@ const RecipeSection = ({ selectedFilter }: RecipeSectionProps) => {
     <section>
       <div className="mb-4 text-center">
         <h3 className="text-2xl font-semibold">
-          {selectedFilter.type && selectedFilter.value
-            ? `${selectedFilter.value} Recipes`
-            : 'All Recipes'}
+          {selectedFilter.type && selectedFilter.value ? `${selectedFilter.value}` : 'All'} Recipes
         </h3>
       </div>
 
       <div className="md:p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
         {isLoading ? (
-          <p>Loading recipes...</p>
+          <p className="text-center col-span-full">Loading recipes...</p>
         ) : recipes.length > 0 ? (
           recipes.map(recipe => <RecipeCard key={recipe.id} {...recipe} />)
         ) : (
-          <p>No recipes found.</p>
+          <p className="text-center col-span-full">No recipes found.</p>
         )}
       </div>
     </section>
