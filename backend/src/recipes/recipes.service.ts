@@ -12,7 +12,12 @@ import {
   TransformedRecipesResponse,
 } from './dto/transformed-recipe.dto';
 
-function transformRecipe(recipe: any): TransformedRecipe {
+const capitalizeFirstLetter = (sentence: string): string => {
+  if (!sentence) return sentence;
+  return sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase();
+};
+
+const transformRecipe = (recipe: any): TransformedRecipe => {
   const ingredients: { ingredient: string; measure: string }[] = [];
   for (let i = 1; i <= 20; i++) {
     const ingredient = recipe[`strIngredient${i}`];
@@ -24,9 +29,45 @@ function transformRecipe(recipe: any): TransformedRecipe {
     }
   }
 
-  const instructions = recipe.strInstructions
-    ? recipe.strInstructions.split('\r\n').filter((step: string) => step.trim())
-    : [];
+  let instructions: string[] = [];
+  if (recipe.strInstructions) {
+    let rawInstructions = recipe.strInstructions
+      .split('\r\n')
+      .filter(
+        (step: string) =>
+          step.trim() && !/^step\s+\d+$/i.test(step.trim()) && !/^\d+$/.test(step.trim()),
+      );
+
+    rawInstructions = rawInstructions.map(step => {
+      let inParentheses = false;
+      let result = '';
+      for (let i = 0; i < step.length; i++) {
+        const char = step[i];
+        if (char === '(') inParentheses = true;
+        else if (char === ')') inParentheses = false;
+        result += inParentheses && char === '.' ? ';' : char;
+      }
+      return result;
+    });
+
+    let splitInstructions = rawInstructions.flatMap((step: string) =>
+      step
+        .split('.')
+        .map(s => s.trim().toLowerCase().replace(/;/g, '.'))
+        .filter(s => s && !/^\d+$/.test(s)),
+    );
+
+    instructions = [];
+    for (const step of splitInstructions) {
+      if ((step.startsWith('(') || step.endsWith(')')) && instructions.length > 0) {
+        instructions[instructions.length - 1] += ` ${step}`;
+      } else {
+        instructions.push(step);
+      }
+    }
+
+    instructions = instructions.map(capitalizeFirstLetter);
+  }
 
   const tags = recipe.strTags ? recipe.strTags.split(',') : null;
 
@@ -41,7 +82,7 @@ function transformRecipe(recipe: any): TransformedRecipe {
     youtubeUrl: recipe.strYoutube,
     ingredients,
   };
-}
+};
 
 @Injectable()
 export class RecipesService {
@@ -86,14 +127,7 @@ export class RecipesService {
 
   getAvaliableRecipes(ingredient?: string, area?: string, category?: string) {
     if (!ingredient && !area && !category) {
-      const searchUrl = `${this.apiBaseUrl}/search.php?s=`;
-      return this.httpService.get(searchUrl).pipe(
-        map(response => {
-          const recipes = response.data.meals || [];
-          const transformedRecipes = recipes.map(transformRecipe);
-          return { recipes: transformedRecipes } as TransformedRecipesResponse;
-        }),
-      );
+      return this.getAllRecipes();
     }
 
     const filters: RecipeFilter = {
@@ -102,14 +136,8 @@ export class RecipesService {
       ...(category && { category }),
     };
 
-    const queryUrl = buildRecipeQuery(filters);
-
-    return this.httpService.get(queryUrl).pipe(
-      map(response => {
-        const recipes = response.data.meals || [];
-        const transformedRecipes = recipes.map(transformRecipe);
-        return { recipes: transformedRecipes } as TransformedRecipesResponse;
-      }),
+    return buildRecipeQuery(filters, this.httpService, `${this.apiBaseUrl}/filter.php`).pipe(
+      map(recipes => ({ recipes }) as TransformedRecipesResponse),
     );
   }
 
@@ -130,5 +158,16 @@ export class RecipesService {
     return this.httpService
       .get(`${this.apiBaseUrl}/list.php?${filterQuery}=list`)
       .pipe(map(response => this.transformFilterResponse(filter, response.data)));
+  }
+
+  getAllRecipes() {
+    const searchUrl = `${this.apiBaseUrl}/search.php?s=`;
+    return this.httpService.get(searchUrl).pipe(
+      map(response => {
+        const recipes = response.data.meals || [];
+        const transformedRecipes = recipes.map(transformRecipe);
+        return { recipes: transformedRecipes } as TransformedRecipesResponse;
+      }),
+    );
   }
 }
