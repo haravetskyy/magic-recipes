@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-async function bootstrap() {
+const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
@@ -30,5 +30,5 @@ async function bootstrap() {
 
   await app.listen(port);
   console.log(`Server is running on http://localhost:${port}`);
-}
+};
 bootstrap();

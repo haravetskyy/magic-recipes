@@ -2,9 +2,9 @@ import { FilterResponse, FilterValue } from '@/types/recipe';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Badge } from './ui/badge';
 
-async function fetchFilterValues(
+const fetchFilterValues = async (
   filterType: 'ingredient' | 'area' | 'category',
-): Promise<FilterValue[]> {
+): Promise<FilterValue[]> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/recipes/getFilters?filter=${filterType}`,
     { cache: 'no-store' },
@@ -16,7 +16,7 @@ async function fetchFilterValues(
 
   const data: FilterResponse = await response.json();
   return data.values || [];
-}
+};
 
 let areaFilters: FilterValue[] = [];
 let categoryFilters: FilterValue[] = [];
