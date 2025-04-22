@@ -15,10 +15,10 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <html lang="en">
-      <body className={`antialiased w-svw h-svh flex justify-center overflow-x-hidden`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased w-svw h-svh flex justify-center overflow-x-hidden">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="p-4 flex flex-col gap-4 container ">
+          <div className="p-4 flex flex-col gap-4 container">
             <Nav />
             {children}
             <Footer />
