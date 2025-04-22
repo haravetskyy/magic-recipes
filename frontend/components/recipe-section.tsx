@@ -43,14 +43,24 @@ const RecipeSection = ({ selectedFilter }: RecipeSectionProps) => {
   const recipes = recipesData?.recipes || [];
 
   return (
-    <section className="md:p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
-      {isLoading ? (
-        <p>Loading recipes...</p>
-      ) : recipes.length > 0 ? (
-        recipes.map(recipe => <RecipeCard key={recipe.id} {...recipe} />)
-      ) : (
-        <p>No recipes found.</p>
-      )}
+    <section>
+      <div className="mb-4 text-center">
+        <h3 className="text-2xl font-semibold">
+          {selectedFilter.type && selectedFilter.value
+            ? `${selectedFilter.value} Recipes`
+            : 'All Recipes'}
+        </h3>
+      </div>
+
+      <div className="md:p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
+        {isLoading ? (
+          <p>Loading recipes...</p>
+        ) : recipes.length > 0 ? (
+          recipes.map(recipe => <RecipeCard key={recipe.id} {...recipe} />)
+        ) : (
+          <p>No recipes found.</p>
+        )}
+      </div>
     </section>
   );
 };
