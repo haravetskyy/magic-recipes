@@ -6,7 +6,7 @@ import { Button } from './ui/button';
 const Nav = () => {
   return (
     <section className="rounded-lg flex flex-row md:px-6 gap-4 items-center justify-between">
-      <Button variant="link">
+      <Button variant="link" className="p-0">
         <Link href={'/'} className="flex flex-row gap-2 items-center">
           <Sparkles />
           <h2 className="font-semibold text-lg">Magic Recipes</h2>

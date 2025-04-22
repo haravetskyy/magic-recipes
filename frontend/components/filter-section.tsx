@@ -1,6 +1,19 @@
+'use client';
+
 import { FilterResponse, FilterValue } from '@/types/recipe';
+import { useQuery } from '@tanstack/react-query';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Badge } from './ui/badge';
+
+interface SelectedFilter {
+  type: 'area' | 'category' | null;
+  value: string | null;
+}
+
+interface FilterSectionProps {
+  selectedFilter: SelectedFilter;
+  setSelectedFilter: (filter: SelectedFilter) => void;
+}
 
 const fetchFilterValues = async (
   filterType: 'ingredient' | 'area' | 'category',
@@ -18,21 +31,25 @@ const fetchFilterValues = async (
   return data.values || [];
 };
 
-let areaFilters: FilterValue[] = [];
-let categoryFilters: FilterValue[] = [];
+const FilterSection = ({ selectedFilter, setSelectedFilter }: FilterSectionProps) => {
+  const { data: areaFilters = [], isLoading: isLoadingAreas } = useQuery({
+    queryKey: ['areaFilters'],
+    queryFn: () => fetchFilterValues('area'),
+  });
 
-try {
-  [areaFilters, categoryFilters] = await Promise.all([
-    fetchFilterValues('area'),
-    fetchFilterValues('category'),
-  ]);
-} catch (error) {
-  console.error('Error fetching filters:', error);
-  areaFilters = [];
-  categoryFilters = [];
-}
+  const { data: categoryFilters = [], isLoading: isLoadingCategories } = useQuery({
+    queryKey: ['categoryFilters'],
+    queryFn: () => fetchFilterValues('category'),
+  });
 
-const FilterSection = async () => {
+  const toggleFilter = (filterType: 'area' | 'category', filterValue: string) => {
+    if (selectedFilter.type === filterType && selectedFilter.value === filterValue) {
+      setSelectedFilter({ type: null, value: null });
+    } else {
+      setSelectedFilter({ type: filterType, value: filterValue });
+    }
+  };
+
   return (
     <section className="flex flex-col gap-4 md:p-4 items-center w-full">
       <h2 className="font-semibold text-4xl">What to cook?</h2>
@@ -41,22 +58,46 @@ const FilterSection = async () => {
         <AccordionItem value="areas">
           <AccordionTrigger className="w-full">Filter by area</AccordionTrigger>
           <AccordionContent className="flex flex-row flex-wrap gap-2">
-            {areaFilters.map(area => (
-              <Badge variant="outline" key={area.id}>
-                {area.name}
-              </Badge>
-            ))}
+            {isLoadingAreas ? (
+              <p>Loading areas...</p>
+            ) : (
+              areaFilters.map(area => (
+                <Badge
+                  key={area.id}
+                  variant={
+                    selectedFilter.type === 'area' && selectedFilter.value === area.name
+                      ? 'default'
+                      : 'outline'
+                  }
+                  className="cursor-pointer"
+                  onClick={() => toggleFilter('area', area.name)}>
+                  {area.name}
+                </Badge>
+              ))
+            )}
           </AccordionContent>
         </AccordionItem>
 
         <AccordionItem value="categories">
           <AccordionTrigger className="w-full">Filter by category</AccordionTrigger>
           <AccordionContent className="flex flex-row flex-wrap gap-2">
-            {categoryFilters.map(category => (
-              <Badge variant="outline" key={category.id}>
-                {category.name}
-              </Badge>
-            ))}
+            {isLoadingCategories ? (
+              <p>Loading categories...</p>
+            ) : (
+              categoryFilters.map(category => (
+                <Badge
+                  key={category.id}
+                  variant={
+                    selectedFilter.type === 'category' && selectedFilter.value === category.name
+                      ? 'default'
+                      : 'outline'
+                  }
+                  className="cursor-pointer"
+                  onClick={() => toggleFilter('category', category.name)}>
+                  {category.name}
+                </Badge>
+              ))
+            )}
           </AccordionContent>
         </AccordionItem>
       </Accordion>
