@@ -3,6 +3,7 @@
 import { RecipesResponse } from '@/types/recipe';
 import { useQuery } from '@tanstack/react-query';
 import RecipeCard from './recipe-card';
+import { Skeleton } from './ui/skeleton';
 
 interface SelectedFilter {
   type: 'area' | 'category' | 'ingredient' | null;
@@ -52,7 +53,11 @@ const RecipeSection = ({ selectedFilter }: RecipeSectionProps) => {
 
       <div className="md:p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
         {isLoading ? (
-          <p className="text-center col-span-full">Loading recipes...</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton key={index} className="aspect-square w-full" />
+            ))}
+          </div>
         ) : recipes.length > 0 ? (
           recipes.map(recipe => <RecipeCard key={recipe.id} {...recipe} />)
         ) : (

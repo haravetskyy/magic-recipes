@@ -3,6 +3,7 @@
 import FilterSection from '@/components/filter-section';
 import Header from '@/components/header';
 import RecipeSection from '@/components/recipe-section';
+import { Skeleton } from '@/components/ui/skeleton';
 import { SelectedFilter } from '@/types/filter';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -27,7 +28,17 @@ const RecipesPage = () => {
   }, [searchParams]);
 
   return (
-    <Suspense fallback={<div>Loading recipes...</div>}>
+    <Suspense
+      fallback={
+        <div className="md:p-4 flex flex-col gap-4">
+          <Skeleton className="aspect-video w-full" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton key={index} className="aspect-square w-full" />
+            ))}
+          </div>
+        </div>
+      }>
       <QueryClientProvider client={queryClient}>
         <Header />
 

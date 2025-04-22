@@ -4,6 +4,7 @@ import { FilterResponse, FilterValue, SelectedFilter } from '@/types/filter';
 import { useQuery } from '@tanstack/react-query';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import { Badge } from './ui/badge';
+import { Skeleton } from './ui/skeleton';
 
 interface FilterSectionProps {
   selectedFilter: SelectedFilter;
@@ -24,6 +25,18 @@ const fetchFilterValues = async (
 
   const data: FilterResponse = await response.json();
   return data.values || [];
+};
+
+const FilterLoader = ({ length }: { length: number }) => {
+  const widthClasses = ['w-12', 'w-14', 'w-16', 'w-18'] as const;
+
+  return (
+    <>
+      {Array.from({ length: length }, (_, index) => (
+        <Skeleton key={index} className={`h-4 ${widthClasses[index % widthClasses.length]}`} />
+      ))}
+    </>
+  );
 };
 
 const FilterSection = ({ selectedFilter, setSelectedFilter }: FilterSectionProps) => {
@@ -54,7 +67,7 @@ const FilterSection = ({ selectedFilter, setSelectedFilter }: FilterSectionProps
           <AccordionTrigger className="w-full">Filter by area</AccordionTrigger>
           <AccordionContent className="flex flex-row flex-wrap gap-2">
             {isLoadingAreas ? (
-              <p>Loading areas...</p>
+              <FilterLoader length={36} />
             ) : (
               areaFilters.map(area => (
                 <Badge
@@ -77,7 +90,7 @@ const FilterSection = ({ selectedFilter, setSelectedFilter }: FilterSectionProps
           <AccordionTrigger className="w-full">Filter by category</AccordionTrigger>
           <AccordionContent className="flex flex-row flex-wrap gap-2">
             {isLoadingCategories ? (
-              <p>Loading categories...</p>
+              <FilterLoader length={20} />
             ) : (
               categoryFilters.map(category => (
                 <Badge
