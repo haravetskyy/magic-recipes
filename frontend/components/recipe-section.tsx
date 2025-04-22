@@ -1,7 +1,7 @@
 import { RecipesResponse } from '@/types/recipe';
 import RecipeCard from './recipe-card';
 
-async function fetchAllRecipes(): Promise<RecipesResponse> {
+const fetchAllRecipes = async (): Promise<RecipesResponse> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recipes/getRecipes`, {
     cache: 'no-store',
   });
@@ -12,7 +12,7 @@ async function fetchAllRecipes(): Promise<RecipesResponse> {
 
   const data: RecipesResponse = await response.json();
   return data || { recipes: [] };
-}
+};
 
 let recipes: RecipesResponse['recipes'] = [];
 

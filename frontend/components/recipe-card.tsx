@@ -24,7 +24,7 @@ const RecipeCard = ({ id, name, category, area, thumbnail }: Recipe) => {
         <Badge variant="secondary">{area}</Badge>
       </div>
 
-      <Link href={`/recipe&id=${id}`}>
+      <Link href={`/recipes/${id}`}>
         <Button className="cursor-pointer w-full px-12 ">
           See complete recipe <CookingPot />
         </Button>
