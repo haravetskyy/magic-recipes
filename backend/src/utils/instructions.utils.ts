@@ -22,7 +22,7 @@ export const processInstructions = (instructionsText: string): string[] => {
       return result;
     });
 
-    let splitInstructions = rawInstructions.flatMap((step: string) =>
+    const splitInstructions = rawInstructions.flatMap((step: string) =>
       step
         .split('.')
         .map(s => s.trim().toLowerCase().replace(/;/g, '.'))
