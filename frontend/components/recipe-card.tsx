@@ -1,5 +1,5 @@
 import { Recipe } from '@/types/recipe';
-import { ChefHat } from 'lucide-react';
+import { CookingPot } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from './ui/badge';
@@ -26,7 +26,7 @@ const RecipeCard = ({ id, name, category, area, thumbnail }: Recipe) => {
 
       <Link href={`/recipes/${id}`}>
         <Button className="cursor-pointer w-full px-12 ">
-          See complete recipe <ChefHat />
+          See complete recipe <CookingPot />
         </Button>
       </Link>
     </Card>
