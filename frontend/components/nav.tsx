@@ -14,7 +14,7 @@ const Nav = () => {
       </Button>
 
       <div className="flex flex-row gap-4 items-center">
-        <Link href={'https://github.com/haravetskyy/magic-recipe'}>
+        <Link href={'https://github.com/haravetskyy/magic-recipes'}>
           <Github />
         </Link>
         <ThemeToggle />
